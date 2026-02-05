@@ -1,33 +1,49 @@
-
-import { useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 
 export default function Tasks({ tasks }) {
   const { data, setData, post } = useForm({
-    title: ''
+    title: '',
+    image: null
   });
 
   const submit = (e) => {
     e.preventDefault();
-    post('/tasks');
+    post('/tasks', { forceFormData: true });
   };
 
   return (
     <div>
       <h1>My Tasks</h1>
 
-      <form onSubmit={submit}>
-        <input 
+      <form onSubmit={submit} encType="multipart/form-data">
+        <input
           value={data.title}
           onChange={e => setData('title', e.target.value)}
+          placeholder="Task title"
         />
+
+        <input
+          type="file"
+          onChange={e => setData('image', e.target.files[0])}
+        />
+
         <button>Add</button>
       </form>
 
-      <ul>
-        {tasks.map(t => (
-          <li key={t.id}>{t.title}</li>
-        ))}
-      </ul>
+      <hr />
+
+      {tasks.map(t => (
+        <div key={t.id}>
+          {t.image && (
+            <img src={`/storage/${t.image}`} width="100" />
+          )}
+          <p>{t.title}</p>
+
+          <button onClick={() => router.delete(`/tasks/${t.id}`)}>
+            Delete
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
