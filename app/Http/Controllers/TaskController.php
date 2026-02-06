@@ -8,40 +8,48 @@ use Inertia\Inertia;
 
 class TaskController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $tasks = $request->user()->tasks;
-        return Inertia::render('Tasks', ['tasks' => $tasks]);
+        return Inertia::render('Tasks', [
+            'tasks' => Task::latest()->get()
+        ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048'
-        ]);
-
         $path = null;
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('tasks', 'public');
         }
 
-        $request->user()->tasks()->create([
+        Task::create([
             'title' => $request->title,
-            'image' => $path
+            'image' => $path,
         ]);
 
         return back();
     }
 
-    public function update(Request $request, Task $task)
-    {
-        $task->update([
-            'title' => $request->title
-        ]);
+   public function update(Request $request, Task $task)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+    ]);
 
-        return back();
+    $path = $task->image;
+
+    if ($request->hasFile('image')) {
+        $path = $request->file('image')->store('tasks', 'public');
     }
+
+    $task->update([
+        'title' => $request->title,
+        'image' => $path,
+    ]);
+
+    return back();
+}
+
 
     public function destroy(Task $task)
     {
@@ -49,3 +57,4 @@ class TaskController extends Controller
         return back();
     }
 }
+
