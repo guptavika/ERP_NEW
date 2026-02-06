@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import Tasks from './Tasks';
 
 export default function Dashboard() {
@@ -9,9 +9,17 @@ export default function Dashboard() {
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
                     Dashboard
                 </h2>
+                
             }
+            
         >
-            <Head title="Dashboard" />
+            <Head title="Dashboard" /> 
+                               <Link
+  href="/tasks"
+  className="text-sm text-gray-700 hover:text-black"
+>
+  Tasks
+</Link>
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">

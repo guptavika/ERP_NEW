@@ -59,7 +59,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                         >
                                             Register
                                         </Link>
-                                        <Link href="/Tasks">Tasks</Link>
+                                        {/* <Link href="/Tasks">Tasks</Link> */}
 
                                     </>
                                 )}
