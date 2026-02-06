@@ -8,14 +8,12 @@ use Inertia\Inertia;
 
 class TaskController extends Controller
 {
-    // Show all tasks
     public function index(Request $request)
     {
         $tasks = $request->user()->tasks;
         return Inertia::render('Tasks', ['tasks' => $tasks]);
     }
 
-    // Store new task
     public function store(Request $request)
     {
         $request->validate([
@@ -36,7 +34,6 @@ class TaskController extends Controller
         return back();
     }
 
-    // Update task
     public function update(Request $request, Task $task)
     {
         $task->update([
@@ -46,7 +43,6 @@ class TaskController extends Controller
         return back();
     }
 
-    // Delete task
     public function destroy(Task $task)
     {
         $task->delete();

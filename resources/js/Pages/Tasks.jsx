@@ -1,49 +1,54 @@
-import { router, useForm } from '@inertiajs/react';
+import { router, useForm, usePage } from "@inertiajs/react";
 
 export default function Tasks({ tasks }) {
-  const { data, setData, post } = useForm({
-    title: '',
-    image: null
-  });
+    const { auth } = usePage().props;
+    const user = auth.user;
 
-  const submit = (e) => {
-    e.preventDefault();
-    post('/tasks', { forceFormData: true });
-  };
+    const { data, setData, post } = useForm({
+        title: "",
+        image: null,
+    });
 
-  return (
-    <div>
-      <h1>My Tasks</h1>
+    const submit = (e) => {
+        e.preventDefault();
+        post("/tasks", { forceFormData: true });
+    };
 
-      <form onSubmit={submit} encType="multipart/form-data">
-        <input
-          value={data.title}
-          onChange={e => setData('title', e.target.value)}
-          placeholder="Task title"
-        />
+    return (
+        <div>
+            <h1>My Tasks</h1>
 
-        <input
-          type="file"
-          onChange={e => setData('image', e.target.files[0])}
-        />
+            {user.role === "Admin" && (
+                <form onSubmit={submit} encType="multipart/form-data">
+                    <input
+                        value={data.title}
+                        onChange={(e) => setData("title", e.target.value)}
+                        placeholder="Task title"
+                    />
 
-        <button>Add</button>
-      </form>
+                    <input
+                        type="file"
+                        onChange={(e) => setData("image", e.target.files[0])}
+                    />
 
-      <hr />
+                    <button>Add</button>
+                </form>
+            )}
 
-      {tasks.map(t => (
-        <div key={t.id}>
-          {t.image && (
-            <img src={`/storage/${t.image}`} width="100" />
-          )}
-          <p>{t.title}</p>
+            <hr />
 
-          <button onClick={() => router.delete(`/tasks/${t.id}`)}>
-            Delete
-          </button>
+            {tasks.map((t) => (
+                <div key={t.id}>
+                    {t.image && <img src={`/storage/${t.image}`} width="100" />}
+                    <p>{t.title}</p>
+
+                    {(user.role === "admin" || user.role === "manager") && (
+                        <button onClick={() => router.delete(`/tasks/${t.id}`)}>
+                            Delete
+                        </button>
+                    )}
+                </div>
+            ))}
         </div>
-      ))}
-    </div>
-  );
+    );
 }
