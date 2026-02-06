@@ -165,12 +165,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     </div>
                 </div>
             </nav>
-                                 <Link
-  href="/tasks"
-  className="text-sm text-gray-700 hover:text-black"
->
-  Tasks
-</Link>
+              
 
             {header && (
                 <header className="bg-white shadow">
