@@ -2,16 +2,18 @@ import { router, useForm, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import {
   Box,
-  Card,
-  CardContent,
-  CardActions,
   Typography,
   TextField,
   Button,
-  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   Avatar,
   IconButton,
-  Stack,
 } from "@mui/material";
 import { Edit, Delete, Save, Cancel, Add } from "@mui/icons-material";
 
@@ -33,7 +35,6 @@ export default function Tasks({ tasks }) {
     image: null,
   });
 
-  // CREATE TASK
   const submit = (e) => {
     e.preventDefault();
     if (!createData.title) return alert("Title is required");
@@ -41,15 +42,13 @@ export default function Tasks({ tasks }) {
     resetCreate();
   };
 
-  // START EDIT
   const startEdit = (task) => {
     setEditingId(task.id);
     setEditData({ title: task.title, image: null });
   };
 
-  // UPDATE TASK
   const updateTask = (id) => {
-    if (!editData.title || editData.title.trim() === "") return alert("Title is required");
+    if (!editData.title) return alert("Title is required");
     put(`/tasks/${id}`, editData, { forceFormData: true });
     setEditingId(null);
     resetEdit();
@@ -57,112 +56,114 @@ export default function Tasks({ tasks }) {
 
   return (
     <Box p={3}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" mb={2}>
         Tasks Dashboard
       </Typography>
 
-      {/* CREATE TASK */}
+      {/* CREATE */}
       {user.role === "Admin" && (
-        <Card sx={{ mb: 3, p: 2, backgroundColor: "#f5f5f5" }}>
-          <Typography variant="h6">Add New Task</Typography>
-          <Grid container spacing={2} alignItems="center" mt={1}>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Task Title"
-                value={createData.title}
-                onChange={(e) => setCreateData("title", e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <input
-                type="file"
-                onChange={(e) => setCreateData("image", e.target.files[0])}
-              />
-            </Grid>
-            <Grid item xs={12} md={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<Add />}
-                onClick={submit}
-              >
-                Add
-              </Button>
-            </Grid>
-          </Grid>
-        </Card>
+        <Box mb={3} display="flex" gap={2}>
+          <TextField
+            label="Task Title"
+            value={createData.title}
+            onChange={(e) => setCreateData("title", e.target.value)}
+          />
+          <input
+            type="file"
+            onChange={(e) => setCreateData("image", e.target.files[0])}
+          />
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={submit}
+          >
+            Add
+          </Button>
+        </Box>
       )}
 
-      {/* TASK LIST */}
-      <Grid container spacing={2}>
-        {tasks.map((t) => (
-          <Grid item xs={12} md={6} lg={4} key={t.id}>
-            <Card sx={{ minHeight: 150 }}>
-              <CardContent>
-                <Stack direction="row" spacing={2} alignItems="center">
+      {/* TABLE */}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><b>ID</b></TableCell>
+              <TableCell><b>Image</b></TableCell>
+              <TableCell><b>Title</b></TableCell>
+              <TableCell><b>Actions</b></TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {tasks.map((t) => (
+              <TableRow key={t.id}>
+                <TableCell>{t.id}</TableCell>
+
+                <TableCell>
                   {t.image && (
                     <Avatar
                       variant="rounded"
                       src={`/storage/${t.image}`}
-                      sx={{ width: 56, height: 56 }}
                     />
                   )}
+                </TableCell>
+
+                <TableCell>
                   {editingId === t.id ? (
                     <TextField
-                      fullWidth
                       value={editData.title}
-                      onChange={(e) => setEditData("title", e.target.value)}
+                      onChange={(e) =>
+                        setEditData("title", e.target.value)
+                      }
                     />
                   ) : (
-                    <Typography variant="h6">{t.title}</Typography>
+                    t.title
                   )}
-                </Stack>
-              </CardContent>
+                </TableCell>
 
-              <CardActions>
-                {editingId === t.id ? (
-                  <>
-                    <Button
-                      size="small"
-                      color="primary"
-                      startIcon={<Save />}
-                      onClick={() => updateTask(t.id)}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      size="small"
-                      color="secondary"
-                      startIcon={<Cancel />}
-                      onClick={() => setEditingId(null)}
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
-                  (user.role === "Admin" || user.role === "Manager") && (
+                <TableCell>
+                  {editingId === t.id ? (
                     <>
                       <IconButton
                         color="primary"
-                        onClick={() => startEdit(t)}
+                        onClick={() => updateTask(t.id)}
                       >
-                        <Edit />
+                        <Save />
                       </IconButton>
                       <IconButton
-                        color="error"
-                        onClick={() => router.delete(`/tasks/${t.id}`)}
+                        color="secondary"
+                        onClick={() => setEditingId(null)}
                       >
-                        <Delete />
+                        <Cancel />
                       </IconButton>
                     </>
-                  )
-                )}
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                  ) : (
+                    (user.role === "Admin" ||
+                      user.role === "Manager") && (
+                      <>
+                        <IconButton
+                          color="primary"
+                          onClick={() => startEdit(t)}
+                        >
+                          <Edit />
+                        </IconButton>
+                        <IconButton
+                          color="error"
+                          onClick={() =>
+                            router.delete(`/tasks/${t.id}`)
+                          }
+                        >
+                          <Delete />
+                        </IconButton>
+                      </>
+                    )
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 }

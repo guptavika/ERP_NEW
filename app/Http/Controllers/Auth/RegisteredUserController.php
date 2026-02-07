@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\AdminMessage;   // 👈 ye import zaroori hai
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,19 +16,11 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
     public function create(): Response
     {
         return Inertia::render('Auth/Register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -36,6 +29,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // 1. User create
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -43,8 +37,14 @@ class RegisteredUserController extends Controller
             'role' => 'user',
         ]);
 
-        event(new Registered($user));
+        // 2. 👇 Admin Inbox entry (YAHI MAIN LOGIC)
+        AdminMessage::create([
+            'user_id' => $user->id,
+            'subject' => 'New User Added',
+            'message' => $user->name . ' has registered in the system.',
+        ]);
 
+        event(new Registered($user));
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
