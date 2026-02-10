@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminInboxController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
@@ -38,6 +39,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/inbox', [AdminInboxController::class, 'index']);
     Route::post('/admin/inbox/read/{id}', [AdminInboxController::class, 'markRead']);
     Route::delete('/admin/inbox/{id}', [AdminInboxController::class, 'delete']);
+});
+
+Route::middleware(['auth'])->group(function () {
+
+    // Full CRUD routes
+    Route::resource('companies', CompanyController::class,);
+
 });
 
 
