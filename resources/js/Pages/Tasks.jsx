@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { Edit, Delete, Save, Cancel, Add } from "@mui/icons-material";
 
-export default function Tasks({ tasks }) {
+export default function Tasks({ tasks, staff }) {
   const { auth } = usePage().props;
   const user = auth.user;
 
@@ -27,6 +27,7 @@ export default function Tasks({ tasks }) {
   const { data: createData, setData: setCreateData, post, reset: resetCreate } = useForm({
     title: "",
     image: null,
+    staff_id: null,
   });
 
   // EDIT FORM
@@ -120,6 +121,24 @@ export default function Tasks({ tasks }) {
                     t.title
                   )}
                 </TableCell>
+   {user.role === "Admin" && (
+  <select
+    value={createData.staff_id}
+    onChange={(e) => setCreateData("staff_id", e.target.value)}
+  >
+    <option value="">Select Staff</option>
+    {staff.map((s) => (
+      <option key={s.id} value={s.id}>
+        {s.name}
+      </option>
+    ))}
+  </select>
+)}
+
+<TableCell>
+  {t.staff ? t.staff.name : "Not Assigned"}
+</TableCell>
+
 
                 <TableCell>
                   {editingId === t.id ? (
