@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AdminInboxController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
@@ -47,6 +49,15 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('companies', CompanyController::class,);
 
 });
+// routes/web.php
+Route::get('/dashboard/{companyId}', [DashboardController::class,'index']);
+
+
+Route::get('/companies/{id}/ledgers', [LedgerController::class,'index']);
+Route::post('/ledgers', [LedgerController::class,'store']);
+Route::put('/ledgers/{ledger}', [LedgerController::class,'update']);
+Route::delete('/ledgers/{ledger}', [LedgerController::class,'destroy']);
+
 
 
 require __DIR__.'/auth.php';

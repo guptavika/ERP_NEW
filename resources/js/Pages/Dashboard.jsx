@@ -18,24 +18,24 @@ import {
   Cog6ToothIcon
 } from '@heroicons/react/24/outline';
 
-export default function Dashboard() {
+export default function Dashboard({companyId, company}) {
   // Sample data for ERP metrics
   const metrics = [
-    { title: 'Total Revenue', value: '$124,580', change: '+12.5%', icon: CurrencyDollarIcon, color: 'text-green-600 bg-green-50' },
-    { title: 'Pending Orders', value: '24', change: '-3.2%', icon: ShoppingCartIcon, color: 'text-blue-600 bg-blue-50' },
-    { title: 'Active Projects', value: '18', change: '+5.1%', icon: ClipboardDocumentListIcon, color: 'text-purple-600 bg-purple-50' },
-    { title: 'Inventory Alert', value: '7 items', change: 'Low stock', icon: BellAlertIcon, color: 'text-red-600 bg-red-50' },
+    { title: 'Total Revenue', value: '$124,580', change: '+12.5%', icon: CurrencyDollarIcon, color: 'text-[#16a34a] bg-[#16a34a]/10' },
+    { title: 'Pending Orders', value: '24', change: '-3.2%', icon: ShoppingCartIcon, color: 'text-[#16a34a] bg-[#16a34a]/10' },
+    { title: 'Active Projects', value: '18', change: '+5.1%', icon: ClipboardDocumentListIcon, color: 'text-[#16a34a] bg-[#16a34a]/10' },
+    { title: 'Inventory Alert', value: '7 items', change: 'Low stock', icon: BellAlertIcon, color: 'text-[#16a34a] bg-[#16a34a]/10' },
   ];
 
   const modules = [
-    { name: 'CRM', icon: UsersIcon, description: 'Customer Management', href: '/crm', count: '42', color: 'bg-blue-500' },
-    { name: 'Inventory', icon: BuildingOffice2Icon, description: 'Stock Management', href: '/inventory', count: '1,248', color: 'bg-green-500' },
-    { name: 'Accounting', icon: CreditCardIcon, description: 'Financial Records', href: '/accounting', count: '234', color: 'bg-purple-500' },
-    { name: 'HRM', icon: UserGroupIcon, description: 'Human Resources', href: '/hrm', count: '87', color: 'bg-pink-500' },
-    { name: 'Procurement', icon: ShoppingCartIcon, description: 'Purchase Orders', href: '/procurement', count: '56', color: 'bg-orange-500' },
-    { name: 'Manufacturing', icon: WrenchScrewdriverIcon, description: 'Production', href: '/manufacturing', count: '18', color: 'bg-indigo-500' },
-    { name: 'Logistics', icon: TruckIcon, description: 'Shipping & Delivery', href: '/logistics', count: '32', color: 'bg-teal-500' },
-    { name: 'Reports', icon: ChartBarIcon, description: 'Analytics', href: '/reports', count: '24', color: 'bg-red-500' },
+    { name: 'CRM', icon: UsersIcon, description: 'Customer Management', href: '/crm', count: '42', color: 'bg-[#16a34a]' },
+    { name: 'Inventory', icon: BuildingOffice2Icon, description: 'Stock Management', href: '/inventory', count: '1,248', color: 'bg-[#16a34a]' },
+    { name: 'Accounting', icon: CreditCardIcon, description: 'Financial Records', href: '/accounting', count: '234', color: 'bg-[#16a34a]' },
+    { name: 'HRM', icon: UserGroupIcon, description: 'Human Resources', href: '/hrm', count: '87', color: 'bg-[#16a34a]' },
+    { name: 'Procurement', icon: ShoppingCartIcon, description: 'Purchase Orders', href: '/procurement', count: '56', color: 'bg-[#16a34a]' },
+    { name: 'Manufacturing', icon: WrenchScrewdriverIcon, description: 'Production', href: '/manufacturing', count: '18', color: 'bg-[#16a34a]' },
+    { name: 'Logistics', icon: TruckIcon, description: 'Shipping & Delivery', href: '/logistics', count: '32', color: 'bg-[#16a34a]' },
+    { name: 'Reports', icon: ChartBarIcon, description: 'Analytics', href: '/reports', count: '24', color: 'bg-[#16a34a]' },
   ];
 
   const recentActivities = [
@@ -44,6 +44,9 @@ export default function Dashboard() {
     { user: 'Mike Johnson', action: 'approved leave request', time: '1 hour ago', module: 'HRM' },
     { user: 'Lisa Wang', action: 'placed new order', time: '2 hours ago', module: 'Procurement' },
   ];
+  
+  console.log("Dashboard companyId:", companyId);
+  console.log("Dashboard company:", company);
 
   return (
     <AuthenticatedLayout
@@ -80,7 +83,6 @@ export default function Dashboard() {
             <ClipboardDocumentListIcon className="w-5 h-5 mr-2" />
             Tasks ({/* Add task count here */})
           </Link>
-
           <Link
             href="/admin/inbox"
             className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
@@ -93,7 +95,7 @@ export default function Dashboard() {
             className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
           >
             <DocumentChartBarIcon className="w-5 h-5 mr-2" />
-            Create Companay
+            Create Company
           </Link>
         </div>
       </div>
@@ -109,7 +111,7 @@ export default function Dashboard() {
                   <div>
                     <p className="text-sm font-medium text-gray-600">{metric.title}</p>
                     <p className="mt-2 text-3xl font-bold text-gray-900">{metric.value}</p>
-                    <p className={`mt-1 text-sm ${metric.change.includes('+') ? 'text-green-600' : metric.change.includes('Low') ? 'text-red-600' : 'text-yellow-600'}`}>
+                    <p className={`mt-1 text-sm ${metric.change.includes('+') ? 'text-[#16a34a]' : metric.change.includes('Low') ? 'text-red-600' : 'text-yellow-600'}`}>
                       {metric.change}
                     </p>
                   </div>
@@ -129,7 +131,7 @@ export default function Dashboard() {
             <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">ERP Modules</h3>
-                <Link href="/modules" className="text-sm font-medium text-blue-600 hover:text-blue-800">
+                <Link href="/modules" className="text-sm font-medium text-[#16a34a] hover:text-[#15803d]">
                   View All
                 </Link>
               </div>
@@ -146,7 +148,7 @@ export default function Dashboard() {
                         <div className={`p-3 rounded-full ${module.color} mb-3`}>
                           <Icon className="w-8 h-8 text-white" />
                         </div>
-                        <h4 className="font-medium text-gray-900 group-hover:text-blue-600">{module.name}</h4>
+                        <h4 className="font-medium text-gray-900 group-hover:text-[#16a34a]">{module.name}</h4>
                         <p className="mt-1 text-sm text-gray-500">{module.description}</p>
                         <span className="mt-2 text-xs font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded">
                           {module.count} items
@@ -167,8 +169,8 @@ export default function Dashboard() {
                 {recentActivities.map((activity, index) => (
                   <div key={index} className="flex items-start pb-4 border-b border-gray-100 last:border-0 last:pb-0">
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <UsersIcon className="w-5 h-5 text-blue-600" />
+                      <div className="w-10 h-10 bg-[#16a34a]/10 rounded-full flex items-center justify-center">
+                        <UsersIcon className="w-5 h-5 text-[#16a34a]" />
                       </div>
                     </div>
                     <div className="ml-4">
@@ -178,7 +180,7 @@ export default function Dashboard() {
                       <div className="flex items-center mt-1">
                         <span className="text-xs text-gray-500">{activity.time}</span>
                         <span className="mx-2 text-gray-300">•</span>
-                        <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                        <span className="text-xs font-medium text-[#16a34a] bg-[#16a34a]/10 px-2 py-1 rounded">
                           {activity.module}
                         </span>
                       </div>
@@ -188,7 +190,7 @@ export default function Dashboard() {
               </div>
               <Link
                 href="/activity"
-                className="flex items-center justify-center w-full px-4 py-3 mt-6 text-sm font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100"
+                className="flex items-center justify-center w-full px-4 py-3 mt-6 text-sm font-medium text-[#16a34a] bg-[#16a34a]/10 rounded-lg hover:bg-[#16a34a]/20"
               >
                 View All Activity
               </Link>
@@ -204,20 +206,20 @@ export default function Dashboard() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Pending Orders</span>
-                <span className="font-semibold">24</span>
+                <span className="font-semibold text-[#16a34a]">24</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Processing</span>
-                <span className="font-semibold">18</span>
+                <span className="font-semibold text-[#16a34a]">18</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Shipped Today</span>
-                <span className="font-semibold">42</span>
+                <span className="font-semibold text-[#16a34a]">42</span>
               </div>
               <div className="pt-4 mt-4 border-t border-gray-100">
                 <Link
                   href="/orders"
-                  className="text-sm font-medium text-blue-600 hover:text-blue-800"
+                  className="text-sm font-medium text-[#16a34a] hover:text-[#15803d]"
                 >
                   View All Orders →
                 </Link>
@@ -254,7 +256,7 @@ export default function Dashboard() {
                 <p className="text-sm font-medium text-gray-900">Q1 Financial Report</p>
                 <p className="text-xs text-gray-500 mt-1">Due: Tomorrow, 5:00 PM</p>
               </div>
-              <div className="p-3 bg-blue-50 rounded-lg">
+              <div className="p-3 bg-[#16a34a]/10 rounded-lg">
                 <p className="text-sm font-medium text-gray-900">Team Meeting</p>
                 <p className="text-xs text-gray-500 mt-1">Today, 3:00 PM</p>
               </div>
@@ -267,17 +269,17 @@ export default function Dashboard() {
         </div>
 
         {/* Bottom Banner */}
-        <div className="p-6 mt-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-sm">
+        <div className="p-6 mt-8 bg-gradient-to-r from-[#16a34a] to-[#15803d] rounded-xl shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-white">Need Help?</h3>
-              <p className="mt-1 text-blue-100">
+              <p className="mt-1 text-white/90">
                 Contact ERP Support Team for any assistance
               </p>
             </div>
             <Link
               href="/support"
-              className="px-6 py-2 text-sm font-medium text-blue-600 bg-white rounded-lg hover:bg-gray-100"
+              className="px-6 py-2 text-sm font-medium text-[#16a34a] bg-white rounded-lg hover:bg-gray-100"
             >
               Get Support
             </Link>
